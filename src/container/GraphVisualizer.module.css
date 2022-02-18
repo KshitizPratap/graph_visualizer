@@ -1,0 +1,8 @@
+.Table{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-flow: wrap;
+    height: 80vh;
+    width: 100vw;
+}
