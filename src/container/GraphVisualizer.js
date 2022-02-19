@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import Node from '../component/Node/Node'
 import classes from './GraphVisualizer.module.css'
+import { shortestPath } from '../Function/ShortestPath'
 
 function GraphVisualizer() {
 
@@ -18,7 +19,7 @@ function GraphVisualizer() {
         {
             for(let j=0; j<20; j++)
             {
-                arr[i][j] = {i, j};
+                arr[i][j] = [i, j];
             }
         }
         setGrid(arr);
@@ -46,14 +47,26 @@ function GraphVisualizer() {
 
     }
 
+    const shortestPathMain = () => {
+        let animated = shortestPath(grid, startCoordinate, endCoordinate)
+
+        let arr = document.getElementsByClassName('tableNodes');
+        for(let i=0; i<animated.length; i++)
+        {
+            setTimeout(() => {
+                arr[animated[i][0]].children[animated[i][1]].style.backgroundColor = 'blue'
+            }, 20*i)
+        }
+    }
+
     const table = grid.length !== 0 ? grid.map((arr) => {
         return(
-            <div>
+            <div className='tableNodes'>
                 {arr.map((node) => {
                     return <Node 
-                                row = {node.i}
-                                col = {node.j}
-                                clickHandler = {() => NodeClickHandler(node.i, node.j)}
+                                row = {node[0]}
+                                col = {node[1]}
+                                clickHandler = {() => NodeClickHandler(node[0], node[1])}
                                 start = {start}
                                 end = {end}
                                 startCoordinate = {startCoordinate}
@@ -69,7 +82,7 @@ function GraphVisualizer() {
 
             <button onClick={startHandler}>Start</button>
             <button onClick={endHandler}>End</button>
-            <button>Solve</button>
+            <button onClick={shortestPathMain}>Solve</button>
             
             <div className={classes.Table}>
                 {table}
