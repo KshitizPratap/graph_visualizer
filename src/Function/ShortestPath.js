@@ -28,24 +28,29 @@ const bfs = (animated, grid, visited, startCoordinate, endCoordinate) => {
         let curr = queue[i];
         i++;
 
+        if(curr[0] === endCoordinate[0] && curr[1] === endCoordinate[1])
+        {
+            animated.push(curr)
+            return;
+        }
+
         visited[curr[0]][curr[1]] = true;
         
-        if(i !== 1){
-            animated.push([curr[0], curr[1]]);
+        if(i > 1){
+            animated.push(curr);
         }
 
         for(let j=0; j<4; j++)
         {
             if(safe(curr[0]+row[j], curr[1]+col[j], visited, grid.length, grid[0].length) === true)
             {
-                if(curr[0]+row[j] === endCoordinate[0] && curr[1]+col[j] === endCoordinate[1])
-                    return;
-
-                queue.push(grid[curr[0]+row[j]][curr[1]+col[j]]);
+                let node = grid[curr[0]+row[j]][curr[1]+col[j]];
+                node.push(curr[0])
+                node.push(curr[1]);
+                queue.push(node);
+                
                 visited[curr[0]+row[j]][curr[1]+col[j]] = true;
             }
         }
     }
-
-
 }

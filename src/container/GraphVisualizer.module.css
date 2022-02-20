@@ -6,3 +6,12 @@
     height: 80vh;
     width: 100vw;
 }
+
+.Buttons{
+    display: flex;
+    background-color: aliceblue;
+    justify-content: center;
+    width: 100vw;
+    margin-top: 2vw;
+    padding: 2rem 0;
+}
