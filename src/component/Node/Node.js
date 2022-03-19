@@ -3,24 +3,33 @@ import React from "react";
 import classes from './Node.module.css';
 
 function Node(props){
-    let color =  "transparent";
+    let nodeStyle = null;
 
     if(props.startCoordinate[0] === props.row && 
         props.startCoordinate[1] === props.col){
-            color = "yellow";
+            nodeStyle = classes.Start;
+            console.log("[Node style]", nodeStyle);
+
     }
 
     else if(props.endCoordinate[0] === props.row && 
         props.endCoordinate[1] === props.col){
-            color = "red";
+            nodeStyle = classes.End;
         }
+
+    if(props.visited[props.row][props.col]){
+        nodeStyle = classes.Wall;
+    }
+
 
     return(
         <div 
-            className= {classes.Node} 
+            className= {[classes.Node, nodeStyle].join(' ')} 
             onClick = {props.clickHandler}
-            style = 
-                {{backgroundColor : color}}
+            onMouseDown = {props.mouseDownHandler}
+            onMouseEnter = {props.mouseMoveHandler}
+            onMouseUp = {props.mouseUpHandler}
+            // onMouseUp = {temp}
         ></div>
     )
 }

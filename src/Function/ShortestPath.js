@@ -1,21 +1,26 @@
-export function shortestPath(grid, startCoordinate, endCoordinate){
-    let animated = [];
-    let visited = Array(50).fill(0).map(row => new Array(20).fill(false));
+export function shortestPath(grid, visited, startCoordinate, endCoordinate){
+    let animated = [];    
+    var visi = [];
+
+    for (var i = 0; i < visited.length; i++)
+        visi[i] = visited[i].slice();
+
+    visi[0][0] = true;
     
-    bfs(animated, grid, visited, startCoordinate, endCoordinate)
+    bfs(animated, grid, visi, startCoordinate, endCoordinate)
 
     return animated;
 }
 
-const safe = (i, j, visited, n, m) => {
-    if(i>=0 && i<n && j>=0 && j<m && !visited[i][j]){
+const safe = (i, j, visi, n, m) => {
+    if(i>=0 && i<n && j>=0 && j<m && !visi[i][j]){
         return true;
     }
 
     return false;
 }
 
-const bfs = (animated, grid, visited, startCoordinate, endCoordinate) => {
+const bfs = (animated, grid, visi, startCoordinate, endCoordinate) => {
     let queue = [];
     let i = 0;
     const col = [1, 0, -1, 0];
@@ -28,13 +33,7 @@ const bfs = (animated, grid, visited, startCoordinate, endCoordinate) => {
         let curr = queue[i];
         i++;
 
-        if(curr[0] === endCoordinate[0] && curr[1] === endCoordinate[1])
-        {
-            animated.push(curr)
-            return;
-        }
-
-        visited[curr[0]][curr[1]] = true;
+        visi[curr[0]][curr[1]] = true;
         
         if(i > 1){
             animated.push(curr);
@@ -42,14 +41,21 @@ const bfs = (animated, grid, visited, startCoordinate, endCoordinate) => {
 
         for(let j=0; j<4; j++)
         {
-            if(safe(curr[0]+row[j], curr[1]+col[j], visited, grid.length, grid[0].length) === true)
+            if(safe(curr[0]+row[j], curr[1]+col[j], visi, grid.length, grid[0].length) === true)
             {
+                if(curr[0]+row[j] === endCoordinate[0] && curr[1]+col[j] === endCoordinate[1])
+                {
+                    animated.push(curr)
+                    animated.push([endCoordinate[0], endCoordinate[1], curr[0], curr[1]]);
+                    return;
+                }
+
                 let node = grid[curr[0]+row[j]][curr[1]+col[j]];
                 node.push(curr[0])
                 node.push(curr[1]);
                 queue.push(node);
                 
-                visited[curr[0]+row[j]][curr[1]+col[j]] = true;
+                visi[curr[0]+row[j]][curr[1]+col[j]] = true;
             }
         }
     }
