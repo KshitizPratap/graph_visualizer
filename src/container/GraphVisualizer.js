@@ -124,18 +124,15 @@ function GraphVisualizer() {
             animationName: "animation",
             animationDuration: "0.4s",
           };
-        else
-        {
+        else {
           // arr[animated[i][0]].children[animated[i][1]].className = classes.animatedNodes
-        }  
+        }
 
         if (i > 0) {
-          arr[animated[i - 1][0]].children[
-            animated[i - 1][1]
-          ].className = classes.animatedNodes
+          arr[animated[i - 1][0]].children[animated[i - 1][1]].className =
+            classes.animatedNodes;
 
           console.dir(arr[animated[i][0]].children[animated[i][1]]);
-
         }
       }, 20 * i);
     }
@@ -146,11 +143,11 @@ function GraphVisualizer() {
     ) {
       setTimeout(() => {
         pathMaker(animated);
-      }, 20 * animated.length);
+      }, 21 * animated.length);
     } else {
       setTimeout(() => {
         alert("Path not found");
-      }, 20 * animated.length);
+      }, 21 * animated.length);
     }
   };
 
@@ -185,10 +182,17 @@ function GraphVisualizer() {
   return (
     <div className={classes.Wrapper}>
       <div className={classes.Nav}>Navigation Bar</div>
-      <div className={classes.Buttons}>
-        <button onClick={startHandler}>Start</button>
-        <button onClick={endHandler}>End</button>
-        <button onClick={shortestPathMain}>Solve</button>
+      <div className={classes.ButtonWrapper}>
+          <button onClick={startHandler} className={classes.Button}>
+            Start
+          </button>
+          <button onClick={endHandler} className={classes.Button}>
+            End
+          </button>
+
+          <button onClick={shortestPathMain} className={classes.Button}>
+            Solve
+          </button>
       </div>
 
       <div className={classes.Table} onMouseLeave={() => setWall(false)}>
