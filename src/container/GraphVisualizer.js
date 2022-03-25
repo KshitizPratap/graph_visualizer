@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import Node from "../component/Node/Node";
 import classes from "./GraphVisualizer.module.css";
 import { shortestPath } from "../Function/ShortestPath";
-import { DFSPathfinder } from '../Function/DFSPathfinder';
+import { DFSPathfinder } from "../Function/DFSPathfinder";
 
 function GraphVisualizer() {
   const [grid, setGrid] = useState([], []);
@@ -125,7 +125,6 @@ function GraphVisualizer() {
         if (i > 0) {
           arr[animated[i - 1][0]].children[animated[i - 1][1]].className =
             classes.animatedNodes;
-
         }
       }, 20 * i);
     }
@@ -147,7 +146,37 @@ function GraphVisualizer() {
   const DFSPathMain = () => {
     let animated = DFSPathfinder(grid, visited, startCoordinate, endCoordinate);
     console.log("[Animated DFS]", animated);
-  }
+
+    let arr = document.getElementsByClassName("tableNodes");
+    for (let i = 0; i < animated.length; i++) {
+      setTimeout(() => {
+        if (i !== animated.length - 1)
+          arr[animated[i][0]].children[animated[i][1]].style = {
+            backgroundColor: "yellow",
+            animationName: "animation",
+            animationDuration: "0.4s",
+          };
+
+        if (i > 0) {
+          arr[animated[i - 1][0]].children[animated[i - 1][1]].className =
+            classes.animatedNodes;
+        }
+      }, 20 * i);
+    }
+
+    if (
+      animated[animated.length - 1][0] === endCoordinate[0] &&
+      animated[animated.length - 1][1] === endCoordinate[1]
+    ) {
+      setTimeout(() => {
+        pathMaker(animated);
+      }, 21 * animated.length);
+    } else {
+      setTimeout(() => {
+        alert("Path not found");
+      }, 21 * animated.length);
+    }
+  };
 
   const table =
     grid.length !== 0
@@ -181,20 +210,20 @@ function GraphVisualizer() {
     <div className={classes.Wrapper}>
       <div className={classes.Nav}>Navigation Bar</div>
       <div className={classes.ButtonWrapper}>
-          <button onClick={startHandler} className={classes.Button}>
-            Start
-          </button>
-          <button onClick={endHandler} className={classes.Button}>
-            End
-          </button>
+        <button onClick={startHandler} className={classes.Button}>
+          Start
+        </button>
+        <button onClick={endHandler} className={classes.Button}>
+          End
+        </button>
 
-          <button onClick={BFSPathMain} className={classes.Button}>
-            BFS
-          </button>
+        <button onClick={BFSPathMain} className={classes.Button}>
+          BFS
+        </button>
 
-          <button onClick={DFSPathMain} className={classes.Button}>
-            DFS
-          </button>
+        <button onClick={DFSPathMain} className={classes.Button}>
+          DFS
+        </button>
       </div>
 
       <div className={classes.Table} onMouseLeave={() => setWall(false)}>
