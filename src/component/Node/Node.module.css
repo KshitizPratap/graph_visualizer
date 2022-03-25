@@ -21,6 +21,7 @@
 
 .Wall{
     background-color: rgb(4, 20, 49);
+    border: 0.1px solid rgba(255, 255, 255, 0.452);
     animation-name: animationWall;
     animation-duration: 0.1s;
 }
@@ -87,6 +88,6 @@
   
     100% {
       transform: scale(1.0);
-      background-color: rgba(20, 42, 243, 0.75);
+      background-color: rgba(23, 33, 128, 0.75);
     }
   }

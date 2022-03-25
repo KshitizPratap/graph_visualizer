@@ -22,7 +22,8 @@
 .ButtonWrapper{
     display: flex;
     justify-content: center;
-    padding: 6px 0;
+    height: 5vh;
+    padding: 10px;
 }
 
 
@@ -35,16 +36,12 @@
   border: none;
   border-radius: 5px;
   font-size: medium;
-  transition: all ease 0.4s;
+  transition: all ease 0.3s;
   margin-left: 15px;
-  border: 1px solid transparent;
 }
 
 .Button:hover{
-  background-color: transparent;
   cursor: pointer;
-  color: rgb(5, 6, 45);
-  border: 1px solid rgb(5, 6, 45);
   box-shadow: 1px 1px 5px rgb(5, 6, 45);
 }
 

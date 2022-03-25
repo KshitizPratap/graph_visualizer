@@ -4,8 +4,6 @@ export function shortestPath(grid, visited, startCoordinate, endCoordinate){
 
     for (var i = 0; i < visited.length; i++)
         visi[i] = visited[i].slice();
-
-    visi[0][0] = true;
     
     bfs(animated, grid, visi, startCoordinate, endCoordinate)
 
@@ -41,7 +39,7 @@ const bfs = (animated, grid, visi, startCoordinate, endCoordinate) => {
 
         for(let j=0; j<4; j++)
         {
-            if(safe(curr[0]+row[j], curr[1]+col[j], visi, grid.length, grid[0].length) === true)
+            if(safe(curr[0]+row[j], curr[1]+col[j], visi, grid.length, grid[0].length))
             {
                 if(curr[0]+row[j] === endCoordinate[0] && curr[1]+col[j] === endCoordinate[1])
                 {

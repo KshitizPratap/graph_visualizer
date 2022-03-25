@@ -8,8 +8,6 @@ function Node(props){
     if(props.startCoordinate[0] === props.row && 
         props.startCoordinate[1] === props.col){
             nodeStyle = classes.Start;
-            console.log("[Node style]", nodeStyle);
-
     }
 
     else if(props.endCoordinate[0] === props.row && 
