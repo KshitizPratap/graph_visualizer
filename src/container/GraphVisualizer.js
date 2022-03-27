@@ -16,22 +16,35 @@ function GraphVisualizer() {
   const [endCoordinate, setEndCoordinate] = useState([]);
 
   const [prevWall, setPrevWall] = useState([-1, -1]);
+  const [reload, setReload] = useState(false);
 
   useEffect(() => {
-    let temp = Array(10)
+    let height = window.innerHeight;
+    let width = window.innerWidth;
+
+    let row = parseInt(width/27);
+    let col = parseInt((0.8*height)/29)
+
+    let temp = Array(row)
       .fill(0)
-      .map((row) => new Array(10).fill(false));
+      .map((row) => new Array(col).fill(false));
     setVisited(temp);
 
-    let arr = Array(10)
+    let arr = Array(row)
       .fill(0)
-      .map((row) => new Array(10).fill(0));
+      .map((row) => new Array(col).fill(0));
 
-    for (let i = 0; i < 10; i++) {
-      for (let j = 0; j < 10; j++) arr[i][j] = [i, j];
+    for (let i = 0; i < row; i++) {
+      for (let j = 0; j < col; j++) arr[i][j] = [i, j];
     }
     setGrid(arr);
-  }, []);
+  }, [reload]);
+
+  const reportWindowSize = () => {
+    setReload(prev => !prev);
+  }
+  
+  window.onresize = reportWindowSize;
 
   const startHandler = () => {
     setStart(true);
@@ -62,8 +75,6 @@ function GraphVisualizer() {
   const mouseMoveHandler = (row, col) => {
     if (wall && (row !== prevWall[0] || col != prevWall[1])) {
       setPrevWall([row, col]);
-
-      console.log(row, col);
 
       setVisited((temp) => {
         temp[row][col] = true;
@@ -161,7 +172,7 @@ function GraphVisualizer() {
           arr[animated[i - 1][0]].children[animated[i - 1][1]].className =
             classes.animatedNodes;
         }
-      }, 20 * i);
+      }, 25 * i);
     }
 
     if (
@@ -174,7 +185,7 @@ function GraphVisualizer() {
     } else {
       setTimeout(() => {
         alert("Path not found");
-      }, 21 * animated.length);
+      }, 26 * animated.length);
     }
   };
 
