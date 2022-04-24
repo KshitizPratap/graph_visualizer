@@ -2,9 +2,6 @@ export function DFSPathfinder(grid, visited, startCoordinate, endCoordinate){
     let animated = [];
     let visi = [];
 
-    console.log("[startCoordinate]", startCoordinate);
-    console.log("[endCoordinate]", endCoordinate);
-
     for(let i=0; i<visited.length; i++)
         visi[i] = visited[i].slice();
 

@@ -3,6 +3,7 @@ import Node from "../component/Node/Node";
 import classes from "./GraphVisualizer.module.css";
 import { shortestPath } from "../Function/ShortestPath";
 import { DFSPathfinder } from "../Function/DFSPathfinder";
+import { SimpleMaze, StaircaseMaze } from "../Function/MazeFunction";
 
 function GraphVisualizer() {
   const [grid, setGrid] = useState([], []);
@@ -32,7 +33,7 @@ function GraphVisualizer() {
 
     let arr = Array(row)
       .fill(0)
-      .map((row) => new Array(col).fill(0));
+      .map(() => new Array(col).fill(0));
 
     for (let i = 0; i < row; i++) {
       for (let j = 0; j < col; j++) arr[i][j] = [i, j];
@@ -41,9 +42,9 @@ function GraphVisualizer() {
   }, [reload]);
 
   const reportWindowSize = () => {
-    setReload(prev => !prev);
-  }
-  
+    setReload((prev) => !prev);
+  };
+
   window.onresize = reportWindowSize;
 
   const startHandler = () => {
@@ -56,6 +57,12 @@ function GraphVisualizer() {
     setStart(false);
     setEnd(true);
     setWall(false);
+  };
+
+  const clearHandler = () => {
+    setReload((prev) => !prev);
+    setEndCoordinate([]);
+    setStartCoordinate([]);
   };
 
   const NodeClickHandler = (row, col) => {
@@ -118,6 +125,7 @@ function GraphVisualizer() {
         arr[path[i][0]].children[path[i][1]].style.backgroundColor = "yellow";
       }, 50 * i);
     }
+
   };
 
   const BFSPathMain = () => {
@@ -126,14 +134,7 @@ function GraphVisualizer() {
     let arr = document.getElementsByClassName("tableNodes");
     for (let i = 0; i < animated.length; i++) {
       setTimeout(() => {
-        if (i !== animated.length - 1)
-          arr[animated[i][0]].children[animated[i][1]].style = {
-            backgroundColor: "yellow",
-            animationName: "animation",
-            animationDuration: "0.4s",
-          };
-
-        if (i > 0) {
+         {
           arr[animated[i - 1][0]].children[animated[i - 1][1]].className =
             classes.animatedNodes;
         }
@@ -146,8 +147,9 @@ function GraphVisualizer() {
     ) {
       setTimeout(() => {
         pathMaker(animated);
-      }, 21 * animated.length);
-    } else {
+      }, 20 * animated.length + 1500);
+    } 
+    else {
       setTimeout(() => {
         alert("Path not found");
       }, 21 * animated.length);
@@ -189,6 +191,46 @@ function GraphVisualizer() {
     }
   };
 
+  const SimpleMazeHandler = () => {
+    let animated = SimpleMaze(visited);
+
+    let arr = document.getElementsByClassName("tableNodes");
+        
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+      {
+        if(animated[i][j]){
+          setTimeout(() => {
+            arr[i].children[j].classList.add(classes.animatedWalls)
+          }, 20*i + 20*j);
+        }
+      }
+    }
+    setVisited(animated)
+
+
+  };
+
+  const StaircaseHandler = () => {
+    let animated = StaircaseMaze(visited);
+    setVisited(animated)
+    let arr = document.getElementsByClassName("tableNodes");
+        
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+      {
+        if(animated[i][j]){
+          setTimeout(() => {
+            arr[i].children[j].classList.add(classes.animatedWalls)
+          }, 5*i + 5*j);
+        }
+      }
+    }
+
+  }
+
   const table =
     grid.length !== 0
       ? grid.map((arr) => {
@@ -227,6 +269,9 @@ function GraphVisualizer() {
         <button onClick={endHandler} className={classes.Button}>
           End
         </button>
+        <button onClick={clearHandler} className={classes.Button}>
+          Clear Board
+        </button>
 
         <button onClick={BFSPathMain} className={classes.Button}>
           BFS
@@ -234,6 +279,14 @@ function GraphVisualizer() {
 
         <button onClick={DFSPathMain} className={classes.Button}>
           DFS
+        </button>
+
+        <button onClick={SimpleMazeHandler} className={classes.Button}>
+          Simple Maze
+        </button>
+
+        <button onClick={StaircaseHandler} className={classes.Button}>
+        Staircase Maze
         </button>
       </div>
 

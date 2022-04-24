@@ -27,7 +27,6 @@ function Node(props){
             onMouseDown = {props.mouseDownHandler}
             onMouseEnter = {props.mouseMoveHandler}
             onMouseUp = {props.mouseUpHandler}
-            // onMouseUp = {temp}
         ></div>
     )
 }

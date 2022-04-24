@@ -20,10 +20,9 @@
 }  
 
 .Wall{
-    background-color: rgb(4, 20, 49);
-    border: 0.1px solid rgba(255, 255, 255, 0.452);
-    animation-name: animationWall;
-    animation-duration: 0.1s;
+  background-color: rgb(17, 32, 60);
+  animation-name: animationWall;
+  animation-duration: 0.5s;
 }
 
 @keyframes animation {
@@ -73,21 +72,26 @@
   @keyframes animationWall {
     0% {
       transform: scale(.3);
-      background-color: rgba(78, 78, 97, 0.75);
+      background-color: rgba(65, 220, 197, 0.75);
       border-radius: 100%;
     }
   
-     50% {
-      background-color: rgba(42, 59, 82, 0.75);
+     25% {
+      transform: scale(0.8);
+      background-color: rgba(54, 150, 182, 0.75);
     }
   
+    50% {
+      transform: scale(1.2);
+      background-color: rgba(41, 174, 198, 0.75)
+    }
+
     75% {
-      transform: scale(1.1);
-      background-color: rgba(44, 37, 133, 0.75)
+      transform: scale(0.9);
+      background-color: rgba(74, 158, 203, 0.75)
     }
-  
     100% {
-      transform: scale(1.0);
-      background-color: rgba(23, 33, 128, 0.75);
+      transform: scale(1);
+      background-color: rgb(17, 32, 60)
     }
   }
