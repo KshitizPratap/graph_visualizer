@@ -80,3 +80,46 @@ export function StaircaseMaze(visited){
 
     return visi; 
 }
+
+const mazeMaker = (visi) => {
+    const row = visi.length;
+    const col = visi[0].length;
+
+    let rowArr = [];
+    for(let i=2; i<row-2; i+=2)
+        rowArr.push(i);
+
+    console.log("[Total col]", col);
+
+    for(let i=0; i<rowArr.length; i++)
+    {
+        let recol = Math.floor(col*Math.random(col))
+        if(recol == 0)
+            recol = 2;
+
+        else if(recol == col-1)
+            recol = col-2;    
+
+        for(let j=0; j<col; j++)
+        {
+            visi[rowArr[i]][j] = true;
+        }
+        console.log("[change col]", recol);
+        visi[rowArr[i]][recol] = false;
+    }
+}
+
+export function RecursiveMaze(visited){
+    const row = visited.length;
+    const col = visited[0].length;
+
+    let visi = Array(row)
+    .fill(0)
+    .map(() => new Array(col).fill(false));
+    
+    boundaryMaker(visi)    
+
+    mazeMaker(visi);
+
+    return visi; 
+}

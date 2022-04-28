@@ -3,7 +3,7 @@ import Node from "../component/Node/Node";
 import classes from "./GraphVisualizer.module.css";
 import { shortestPath } from "../Function/ShortestPath";
 import { DFSPathfinder } from "../Function/DFSPathfinder";
-import { SimpleMaze, StaircaseMaze } from "../Function/MazeFunction";
+import { RecursiveMaze, SimpleMaze, StaircaseMaze } from "../Function/MazeFunction";
 
 function GraphVisualizer() {
   const [grid, setGrid] = useState([], []);
@@ -60,9 +60,7 @@ function GraphVisualizer() {
   };
 
   const clearHandler = () => {
-    setReload((prev) => !prev);
-    setEndCoordinate([]);
-    setStartCoordinate([]);
+    window.location.reload();
   };
 
   const NodeClickHandler = (row, col) => {
@@ -193,8 +191,15 @@ function GraphVisualizer() {
 
   const SimpleMazeHandler = () => {
     let animated = SimpleMaze(visited);
+    setVisited(animated)
 
     let arr = document.getElementsByClassName("tableNodes");
+
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+         arr[i].children[j].classList.remove(classes.animatedWalls)
+    }
         
     for(let i=0; i<animated.length; i++)
     {
@@ -203,20 +208,23 @@ function GraphVisualizer() {
         if(animated[i][j]){
           setTimeout(() => {
             arr[i].children[j].classList.add(classes.animatedWalls)
-          }, 20*i + 20*j);
+          }, 10*i + 10*j);
         }
       }
     }
-    setVisited(animated)
-
-
   };
 
   const StaircaseHandler = () => {
     let animated = StaircaseMaze(visited);
     setVisited(animated)
     let arr = document.getElementsByClassName("tableNodes");
-        
+    
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+         arr[i].children[j].classList.remove(classes.animatedWalls)
+    }
+
     for(let i=0; i<animated.length; i++)
     {
       for(let j=0; j<animated[0].length; j++)
@@ -224,11 +232,35 @@ function GraphVisualizer() {
         if(animated[i][j]){
           setTimeout(() => {
             arr[i].children[j].classList.add(classes.animatedWalls)
-          }, 5*i + 5*j);
+          }, 10*i + 10*j);
         }
       }
     }
+  }
 
+  const RecursiveHandler = () => {
+    let animated = RecursiveMaze(visited)
+
+    setVisited(animated)
+    let arr = document.getElementsByClassName("tableNodes");
+    
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+         arr[i].children[j].classList.remove(classes.animatedWalls)
+    }
+
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+      {
+        if(animated[i][j]){
+          setTimeout(() => {
+            arr[i].children[j].classList.add(classes.animatedWalls)
+          }, 10*i + 10*j);
+        }
+      }
+    }
   }
 
   const table =
@@ -286,7 +318,11 @@ function GraphVisualizer() {
         </button>
 
         <button onClick={StaircaseHandler} className={classes.Button}>
-        Staircase Maze
+          Staircase Maze
+        </button>
+
+        <button onClick={RecursiveHandler} className={classes.Button}>
+          New Maze
         </button>
       </div>
 
