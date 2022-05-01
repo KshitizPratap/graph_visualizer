@@ -101,7 +101,7 @@
     }
 
     75% {
-      transform: scale(0.9);
+      transform: scale(0.8);
       background-color: rgba(74, 158, 203, 0.75)
     }
     100% {

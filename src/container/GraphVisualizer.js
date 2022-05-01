@@ -3,7 +3,7 @@ import Node from "../component/Node/Node";
 import classes from "./GraphVisualizer.module.css";
 import { shortestPath } from "../Function/ShortestPath";
 import { DFSPathfinder } from "../Function/DFSPathfinder";
-import { RecursiveMaze, SimpleMaze, StaircaseMaze } from "../Function/MazeFunction";
+import { VerticalRecursiveMaze, SimpleMaze, StaircaseMaze, HorizontalRecursiveMaze, RandomMaze } from "../Function/MazeFunction";
 
 function GraphVisualizer() {
   const [grid, setGrid] = useState([], []);
@@ -19,12 +19,14 @@ function GraphVisualizer() {
   const [prevWall, setPrevWall] = useState([-1, -1]);
   const [reload, setReload] = useState(false);
 
+  let row, col;
+
   useEffect(() => {
     let height = window.innerHeight;
     let width = window.innerWidth;
 
-    let row = parseInt(width/27);
-    let col = parseInt((0.8*height)/29)
+    row = parseInt(width/27);
+    col = parseInt((0.8*height)/29)
 
     let temp = Array(row)
       .fill(0)
@@ -128,8 +130,8 @@ function GraphVisualizer() {
 
   const BFSPathMain = () => {
     let animated = shortestPath(grid, visited, startCoordinate, endCoordinate);
-
     let arr = document.getElementsByClassName("tableNodes");
+
     for (let i = 0; i < animated.length; i++) {
       setTimeout(() => {
          {
@@ -238,8 +240,8 @@ function GraphVisualizer() {
     }
   }
 
-  const RecursiveHandler = () => {
-    let animated = RecursiveMaze(visited)
+  const VerticalRecursiveHandler = () => {
+    let animated = VerticalRecursiveMaze(visited)
 
     setVisited(animated)
     let arr = document.getElementsByClassName("tableNodes");
@@ -262,6 +264,57 @@ function GraphVisualizer() {
       }
     }
   }
+
+  const HorizontalRecursiveHandler = () => {
+    let animated = HorizontalRecursiveMaze(visited)
+
+    setVisited(animated)
+    let arr = document.getElementsByClassName("tableNodes");
+    
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+         arr[i].children[j].classList.remove(classes.animatedWalls)
+    }
+
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+      {
+        if(animated[i][j]){
+          setTimeout(() => {
+            arr[i].children[j].classList.add(classes.animatedWalls)
+          }, 10*i + 10*j);
+        }
+      }
+    }
+  }
+
+  const RandomMazeHandler = () => {
+    let animated = RandomMaze(visited)
+
+    setVisited(animated)
+    let arr = document.getElementsByClassName("tableNodes");
+    
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+         arr[i].children[j].classList.remove(classes.animatedWalls)
+    }
+
+    for(let i=0; i<animated.length; i++)
+    {
+      for(let j=0; j<animated[0].length; j++)
+      {
+        if(animated[i][j]){
+          setTimeout(() => {
+            arr[i].children[j].classList.add(classes.animatedWalls)
+          }, 10*i + 10*j);
+        }
+      }
+    }
+  }
+  
 
   const table =
     grid.length !== 0
@@ -313,6 +366,10 @@ function GraphVisualizer() {
           DFS
         </button>
 
+        <button onClick={RandomMazeHandler} className={classes.Button}>
+          Random Maze
+        </button>
+
         <button onClick={SimpleMazeHandler} className={classes.Button}>
           Simple Maze
         </button>
@@ -321,8 +378,12 @@ function GraphVisualizer() {
           Staircase Maze
         </button>
 
-        <button onClick={RecursiveHandler} className={classes.Button}>
-          New Maze
+        <button onClick={VerticalRecursiveHandler} className={classes.Button}>
+          Vertical Skew
+        </button>
+
+        <button onClick={HorizontalRecursiveHandler} className={classes.Button}>
+          Horizontal Skew
         </button>
       </div>
 
