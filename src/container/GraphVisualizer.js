@@ -3,7 +3,13 @@ import Node from "../component/Node/Node";
 import classes from "./GraphVisualizer.module.css";
 import { shortestPath } from "../Function/ShortestPath";
 import { DFSPathfinder } from "../Function/DFSPathfinder";
-import { VerticalRecursiveMaze, SimpleMaze, StaircaseMaze, HorizontalRecursiveMaze, RandomMaze } from "../Function/MazeFunction";
+import {
+  VerticalRecursiveMaze,
+  SimpleMaze,
+  StaircaseMaze,
+  HorizontalRecursiveMaze,
+  RandomMaze,
+} from "../Function/MazeFunction";
 
 function GraphVisualizer() {
   const [grid, setGrid] = useState([], []);
@@ -18,15 +24,17 @@ function GraphVisualizer() {
 
   const [prevWall, setPrevWall] = useState([-1, -1]);
   const [reload, setReload] = useState(false);
-
+  
+  const [algo, setAlgo] = useState("select")
+  
   let row, col;
 
   useEffect(() => {
     let height = window.innerHeight;
     let width = window.innerWidth;
 
-    row = parseInt(width/27);
-    col = parseInt((0.8*height)/29)
+    row = parseInt(width / 27);
+    col = parseInt((0.85 * height) / 29);
 
     let temp = Array(row)
       .fill(0)
@@ -62,7 +70,23 @@ function GraphVisualizer() {
   };
 
   const clearHandler = () => {
-    window.location.reload();
+    let arr = document.getElementsByClassName("tableNodes");
+    let mazeArr = JSON.parse(sessionStorage.getItem("mazeArr"));
+    
+    let row = mazeArr.length, col = mazeArr[0].length
+    
+    for(let i=0; i<row; i++)
+    {
+      for(let j=0; j<col; j++)
+      {
+        if(!mazeArr[i][j]){
+          arr[i].children[j].classList.remove(classes.animatedNodes);
+          arr[i].children[j].classList.remove(classes.path);
+
+        }
+      }
+    }
+    setVisited(mazeArr);
   };
 
   const NodeClickHandler = (row, col) => {
@@ -122,10 +146,9 @@ function GraphVisualizer() {
       if (path[i][0] === undefined) continue;
 
       setTimeout(() => {
-        arr[path[i][0]].children[path[i][1]].style.backgroundColor = "yellow";
+        arr[path[i][0]].children[path[i][1]].classList.add(classes.path)
       }, 50 * i);
     }
-
   };
 
   const BFSPathMain = () => {
@@ -134,9 +157,8 @@ function GraphVisualizer() {
 
     for (let i = 0; i < animated.length; i++) {
       setTimeout(() => {
-         {
-          arr[animated[i - 1][0]].children[animated[i - 1][1]].className =
-            classes.animatedNodes;
+        {
+          arr[animated[i - 1][0]].children[animated[i - 1][1]].classList.add(classes.animatedNodes)
         }
       }, 20 * i);
     }
@@ -148,8 +170,7 @@ function GraphVisualizer() {
       setTimeout(() => {
         pathMaker(animated);
       }, 20 * animated.length + 1500);
-    } 
-    else {
+    } else {
       setTimeout(() => {
         alert("Path not found");
       }, 21 * animated.length);
@@ -193,128 +214,163 @@ function GraphVisualizer() {
 
   const SimpleMazeHandler = () => {
     let animated = SimpleMaze(visited);
-    setVisited(animated)
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
 
     let arr = document.getElementsByClassName("tableNodes");
 
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-         arr[i].children[j].classList.remove(classes.animatedWalls)
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++)
+        arr[i].children[j].classList.remove(classes.animatedWalls);
     }
-        
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-      {
-        if(animated[i][j]){
+
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++) {
+        if (animated[i][j]) {
           setTimeout(() => {
-            arr[i].children[j].classList.add(classes.animatedWalls)
-          }, 10*i + 10*j);
+            arr[i].children[j].classList.add(classes.animatedWalls);
+          }, 10 * i + 10 * j);
         }
       }
     }
+
+    setTimeout(() => {
+      setVisited(animated);
+    }, 11 * row + 11 * col);
   };
 
   const StaircaseHandler = () => {
     let animated = StaircaseMaze(visited);
-    setVisited(animated)
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
+
     let arr = document.getElementsByClassName("tableNodes");
-    
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-         arr[i].children[j].classList.remove(classes.animatedWalls)
+
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++)
+        arr[i].children[j].classList.remove(classes.animatedWalls);
     }
 
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-      {
-        if(animated[i][j]){
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++) {
+        if (animated[i][j]) {
           setTimeout(() => {
-            arr[i].children[j].classList.add(classes.animatedWalls)
-          }, 10*i + 10*j);
+            arr[i].children[j].classList.add(classes.animatedWalls);
+          }, 10 * i + 10 * j);
         }
       }
     }
-  }
+
+    setTimeout(() => {
+      setVisited(animated);
+    }, 11 * row + 11 * col);
+  };
 
   const VerticalRecursiveHandler = () => {
-    let animated = VerticalRecursiveMaze(visited)
+    let animated = VerticalRecursiveMaze(visited);
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
 
-    setVisited(animated)
     let arr = document.getElementsByClassName("tableNodes");
-    
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-         arr[i].children[j].classList.remove(classes.animatedWalls)
+
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++)
+        arr[i].children[j].classList.remove(classes.animatedWalls);
     }
 
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-      {
-        if(animated[i][j]){
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++) {
+        if (animated[i][j]) {
           setTimeout(() => {
-            arr[i].children[j].classList.add(classes.animatedWalls)
-          }, 10*i + 10*j);
+            arr[i].children[j].classList.add(classes.animatedWalls);
+          }, 10 * i + 10 * j);
         }
       }
     }
-  }
+
+    setTimeout(() => {
+      setVisited(animated);
+    }, 11 * row + 11 * col);
+  };
 
   const HorizontalRecursiveHandler = () => {
-    let animated = HorizontalRecursiveMaze(visited)
+    let animated = HorizontalRecursiveMaze(visited);
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
 
-    setVisited(animated)
     let arr = document.getElementsByClassName("tableNodes");
-    
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-         arr[i].children[j].classList.remove(classes.animatedWalls)
+
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++)
+        arr[i].children[j].classList.remove(classes.animatedWalls);
     }
 
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-      {
-        if(animated[i][j]){
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++) {
+        if (animated[i][j]) {
           setTimeout(() => {
-            arr[i].children[j].classList.add(classes.animatedWalls)
-          }, 10*i + 10*j);
+            arr[i].children[j].classList.add(classes.animatedWalls);
+          }, 10 * i + 10 * j);
         }
       }
     }
-  }
+
+    setTimeout(() => {
+      setVisited(animated);
+    }, 11 * row + 11 * col);
+  };
 
   const RandomMazeHandler = () => {
-    let animated = RandomMaze(visited)
+    let animated = RandomMaze(visited);
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
 
-    setVisited(animated)
     let arr = document.getElementsByClassName("tableNodes");
-    
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-         arr[i].children[j].classList.remove(classes.animatedWalls)
+
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++)
+        arr[i].children[j].classList.remove(classes.animatedWalls);
     }
 
-    for(let i=0; i<animated.length; i++)
-    {
-      for(let j=0; j<animated[0].length; j++)
-      {
-        if(animated[i][j]){
+    for (let i = 0; i < animated.length; i++) {
+      for (let j = 0; j < animated[0].length; j++) {
+        if (animated[i][j]) {
           setTimeout(() => {
-            arr[i].children[j].classList.add(classes.animatedWalls)
-          }, 10*i + 10*j);
+            arr[i].children[j].classList.add(classes.animatedWalls);
+          }, 10 * i + 10 * j);
         }
       }
     }
+
+    setTimeout(() => {
+      setVisited(animated);
+    }, 11 * row + 11 * col);
+  };
+
+  const AlgoHandler = (event) => {
+    setAlgo(event.target.value);
   }
-  
+
+  const MazeHandler = (event) => {
+    let maze = event.target.value;
+
+    if(maze === "random")
+      RandomMazeHandler();
+    else if(maze === "simple")
+      SimpleMazeHandler();
+    else if(maze === "staircase")
+      StaircaseHandler();
+    else if(maze === "vertical")
+      VerticalRecursiveHandler();
+    else if(maze === "horizontal")
+      HorizontalRecursiveHandler();
+  }
+
+  const VisualizeHandler = () => {
+    if(algo === "select")
+      alert("Please select an algorithm")
+    if(algo === "bfs")
+      BFSPathMain();
+    else if(algo === "dfs")
+      DFSPathMain();
+    // else if(algo === "dijkstra")
+    //   StaircaseHandler();
+  }
 
   const table =
     grid.length !== 0
@@ -348,42 +404,36 @@ function GraphVisualizer() {
     <div className={classes.Wrapper}>
       <div className={classes.Nav}>Navigation Bar</div>
       <div className={classes.ButtonWrapper}>
+
+        <select name="maze" id="maze" onChange={MazeHandler}>
+          <option value="maze" selected disabled>Select Maze</option>
+          <option value="random">Random Maze</option>
+          <option value="simple">Simple Maze</option>
+          <option value="staircase">Staircase Maze</option>
+          <option value="vertical">Vertical Skew</option>
+          <option value="horizontal">Horizontal Skew</option>
+        </select>
+
         <button onClick={startHandler} className={classes.Button}>
           Start
         </button>
         <button onClick={endHandler} className={classes.Button}>
           End
         </button>
+
+        <select name="algorithm" id="algorithm" onChange={AlgoHandler}>
+          <option value="algo" selected disabled>Select Algorithm</option>
+          <option value="dijkstra">Dijkstra's Algorithm</option>
+          <option value="bfs">Breath-First Search</option>
+          <option value="dfs">Depth-First Search</option>
+        </select>
+
+         <button onClick={VisualizeHandler} className={classes.Button}>
+          Visualize
+        </button>       
+
         <button onClick={clearHandler} className={classes.Button}>
           Clear Board
-        </button>
-
-        <button onClick={BFSPathMain} className={classes.Button}>
-          BFS
-        </button>
-
-        <button onClick={DFSPathMain} className={classes.Button}>
-          DFS
-        </button>
-
-        <button onClick={RandomMazeHandler} className={classes.Button}>
-          Random Maze
-        </button>
-
-        <button onClick={SimpleMazeHandler} className={classes.Button}>
-          Simple Maze
-        </button>
-
-        <button onClick={StaircaseHandler} className={classes.Button}>
-          Staircase Maze
-        </button>
-
-        <button onClick={VerticalRecursiveHandler} className={classes.Button}>
-          Vertical Skew
-        </button>
-
-        <button onClick={HorizontalRecursiveHandler} className={classes.Button}>
-          Horizontal Skew
         </button>
       </div>
 

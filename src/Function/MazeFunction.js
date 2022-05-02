@@ -318,14 +318,14 @@ const RandomMazeMaker = (visi) => {
     const row = visi.length;
     const col = visi[0].length;
 
-    for(let j=2;j<col-2; j++)
+    for(let j=0;j<col; j++)
     {
         let rowArr = new Set();
 
         for(let i=0; i<row/3; i++)
-            rowArr.add(Math.floor(Math.random() * (row-3) + 2));
+            rowArr.add(Math.floor(Math.random() * row));
 
-        for(let i=2; i<row-2; i++)
+        for(let i=0; i<row; i++)
         {
             if(rowArr.has(i))
                 visi[i][j] = true;
