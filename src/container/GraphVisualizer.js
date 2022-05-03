@@ -24,10 +24,12 @@ function GraphVisualizer() {
 
   const [prevWall, setPrevWall] = useState([-1, -1]);
   const [reload, setReload] = useState(false);
-  
-  const [algo, setAlgo] = useState("select")
-  
-  let row, col;
+
+  const [algo, setAlgo] = useState("select");
+
+  let row,
+    col,
+    speed = 20;
 
   useEffect(() => {
     let height = window.innerHeight;
@@ -69,26 +71,6 @@ function GraphVisualizer() {
     setWall(false);
   };
 
-  const clearHandler = () => {
-    let arr = document.getElementsByClassName("tableNodes");
-    let mazeArr = JSON.parse(sessionStorage.getItem("mazeArr"));
-    
-    let row = mazeArr.length, col = mazeArr[0].length
-    
-    for(let i=0; i<row; i++)
-    {
-      for(let j=0; j<col; j++)
-      {
-        if(!mazeArr[i][j]){
-          arr[i].children[j].classList.remove(classes.animatedNodes);
-          arr[i].children[j].classList.remove(classes.path);
-
-        }
-      }
-    }
-    setVisited(mazeArr);
-  };
-
   const NodeClickHandler = (row, col) => {
     if (start) {
       setStartCoordinate([row, col]);
@@ -116,6 +98,48 @@ function GraphVisualizer() {
 
   const mouseUpHandler = () => {
     setWall(false);
+  };
+
+  const clearPathHandler = () => {
+    let arr = document.getElementsByClassName("tableNodes");
+    let mazeArr = JSON.parse(sessionStorage.getItem("mazeArr"));
+
+    let row = mazeArr.length,
+      col = mazeArr[0].length;
+
+    for (let i = 0; i < row; i++) {
+      for (let j = 0; j < col; j++) {
+        if (!mazeArr[i][j]) {
+          arr[i].children[j].classList.remove(classes.animatedNodes);
+          arr[i].children[j].classList.remove(classes.path);
+        }
+      }
+    }
+    setVisited(mazeArr);
+  };
+
+  const clearHandler = () => {
+    let arr = document.getElementsByClassName("tableNodes");
+    let row = visited.length,
+      col = visited[0].length;
+
+    for (let i = 0; i < row; i++) {
+      for (let j = 0; j < col; j++) {
+        arr[i].children[j].classList.remove(classes.animatedNodes);
+        arr[i].children[j].classList.remove(classes.path);
+      }
+    }
+
+    let temp = Array(row)
+      .fill(0)
+      .map(() => new Array(col).fill(false));
+
+    setVisited(temp);
+  };
+
+  const speedHandler = (event) => {
+    speed = 70-event.target.value
+    // console.log("[speed]", speed);
   };
 
   const pathMaker = (animated) => {
@@ -146,21 +170,25 @@ function GraphVisualizer() {
       if (path[i][0] === undefined) continue;
 
       setTimeout(() => {
-        arr[path[i][0]].children[path[i][1]].classList.add(classes.path)
+        arr[path[i][0]].children[path[i][1]].classList.add(classes.path);
       }, 50 * i);
     }
   };
 
   const BFSPathMain = () => {
+    sessionStorage.setItem("mazeArr", JSON.stringify(visited));
+
     let animated = shortestPath(grid, visited, startCoordinate, endCoordinate);
     let arr = document.getElementsByClassName("tableNodes");
 
     for (let i = 0; i < animated.length; i++) {
       setTimeout(() => {
         {
-          arr[animated[i - 1][0]].children[animated[i - 1][1]].classList.add(classes.animatedNodes)
+          arr[animated[i - 1][0]].children[animated[i - 1][1]].classList.add(
+            classes.animatedNodes
+          );
         }
-      }, 20 * i);
+      }, speed * i);
     }
 
     if (
@@ -169,15 +197,17 @@ function GraphVisualizer() {
     ) {
       setTimeout(() => {
         pathMaker(animated);
-      }, 20 * animated.length + 1500);
+      }, speed * animated.length + 1500);
     } else {
       setTimeout(() => {
         alert("Path not found");
-      }, 21 * animated.length);
+      }, (speed + 2) * animated.length);
     }
   };
 
   const DFSPathMain = () => {
+    sessionStorage.setItem("mazeArr", JSON.stringify(visited));
+
     let animated = DFSPathfinder(grid, visited, startCoordinate, endCoordinate);
     console.log("[Animated DFS]", animated);
 
@@ -195,7 +225,7 @@ function GraphVisualizer() {
           arr[animated[i - 1][0]].children[animated[i - 1][1]].className =
             classes.animatedNodes;
         }
-      }, 25 * i);
+      }, (speed / 2) * i);
     }
 
     if (
@@ -204,17 +234,17 @@ function GraphVisualizer() {
     ) {
       setTimeout(() => {
         pathMaker(animated);
-      }, 21 * animated.length);
+      }, speed * animated.length);
     } else {
       setTimeout(() => {
         alert("Path not found");
-      }, 26 * animated.length);
+      }, speed * animated.length);
     }
   };
 
   const SimpleMazeHandler = () => {
     let animated = SimpleMaze(visited);
-    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated));
 
     let arr = document.getElementsByClassName("tableNodes");
 
@@ -240,7 +270,7 @@ function GraphVisualizer() {
 
   const StaircaseHandler = () => {
     let animated = StaircaseMaze(visited);
-    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated));
 
     let arr = document.getElementsByClassName("tableNodes");
 
@@ -266,7 +296,7 @@ function GraphVisualizer() {
 
   const VerticalRecursiveHandler = () => {
     let animated = VerticalRecursiveMaze(visited);
-    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated));
 
     let arr = document.getElementsByClassName("tableNodes");
 
@@ -292,7 +322,7 @@ function GraphVisualizer() {
 
   const HorizontalRecursiveHandler = () => {
     let animated = HorizontalRecursiveMaze(visited);
-    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated));
 
     let arr = document.getElementsByClassName("tableNodes");
 
@@ -318,7 +348,7 @@ function GraphVisualizer() {
 
   const RandomMazeHandler = () => {
     let animated = RandomMaze(visited);
-    sessionStorage.setItem("mazeArr", JSON.stringify(animated))
+    sessionStorage.setItem("mazeArr", JSON.stringify(animated));
 
     let arr = document.getElementsByClassName("tableNodes");
 
@@ -344,33 +374,25 @@ function GraphVisualizer() {
 
   const AlgoHandler = (event) => {
     setAlgo(event.target.value);
-  }
+  };
 
   const MazeHandler = (event) => {
     let maze = event.target.value;
 
-    if(maze === "random")
-      RandomMazeHandler();
-    else if(maze === "simple")
-      SimpleMazeHandler();
-    else if(maze === "staircase")
-      StaircaseHandler();
-    else if(maze === "vertical")
-      VerticalRecursiveHandler();
-    else if(maze === "horizontal")
-      HorizontalRecursiveHandler();
-  }
+    if (maze === "random") RandomMazeHandler();
+    else if (maze === "simple") SimpleMazeHandler();
+    else if (maze === "staircase") StaircaseHandler();
+    else if (maze === "vertical") VerticalRecursiveHandler();
+    else if (maze === "horizontal") HorizontalRecursiveHandler();
+  };
 
   const VisualizeHandler = () => {
-    if(algo === "select")
-      alert("Please select an algorithm")
-    if(algo === "bfs")
-      BFSPathMain();
-    else if(algo === "dfs")
-      DFSPathMain();
+    if (algo === "select") alert("Please select an algorithm");
+    if (algo === "bfs") BFSPathMain();
+    else if (algo === "dfs") DFSPathMain();
     // else if(algo === "dijkstra")
     //   StaircaseHandler();
-  }
+  };
 
   const table =
     grid.length !== 0
@@ -402,11 +424,12 @@ function GraphVisualizer() {
 
   return (
     <div className={classes.Wrapper}>
-      <div className={classes.Nav}>Navigation Bar</div>
+      <div className={classes.Nav}>Maze Solver</div>
       <div className={classes.ButtonWrapper}>
-
         <select name="maze" id="maze" onChange={MazeHandler}>
-          <option value="maze" selected disabled>Select Maze</option>
+          <option value="maze" selected disabled hidden>
+            Select Maze
+          </option>
           <option value="random">Random Maze</option>
           <option value="simple">Simple Maze</option>
           <option value="staircase">Staircase Maze</option>
@@ -414,27 +437,44 @@ function GraphVisualizer() {
           <option value="horizontal">Horizontal Skew</option>
         </select>
 
-        <button onClick={startHandler} className={classes.Button}>
+        <a onClick={startHandler} className={classes.Button}>
           Start
-        </button>
-        <button onClick={endHandler} className={classes.Button}>
+        </a>
+        <a onClick={endHandler} className={classes.Button}>
           End
-        </button>
+        </a>
 
         <select name="algorithm" id="algorithm" onChange={AlgoHandler}>
-          <option value="algo" selected disabled>Select Algorithm</option>
+          <option value="algo" selected disabled hidden>
+            Select Algorithm
+          </option>
           <option value="dijkstra">Dijkstra's Algorithm</option>
           <option value="bfs">Breath-First Search</option>
           <option value="dfs">Depth-First Search</option>
         </select>
 
-         <button onClick={VisualizeHandler} className={classes.Button}>
+        <a onClick={VisualizeHandler} className={classes.Button}>
           Visualize
-        </button>       
+        </a>
 
-        <button onClick={clearHandler} className={classes.Button}>
+        <span className={classes.speedInput}>
+          Speed
+          <input
+            type="range"
+            onChange={speedHandler}
+            defaultValue="20"
+            min="10"
+            max="60"
+          />
+        </span>
+
+        <a onClick={clearPathHandler} className={classes.Button}>
+          Clear Path
+        </a>
+
+        <a onClick={clearHandler} className={classes.Button}>
           Clear Board
-        </button>
+        </a>
       </div>
 
       <div className={classes.Table} onMouseLeave={() => setWall(false)}>
