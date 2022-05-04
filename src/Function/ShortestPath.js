@@ -1,6 +1,6 @@
 export function shortestPath(grid, visited, startCoordinate, endCoordinate){
     let animated = [];    
-    var visi = [];
+    let visi = [];
 
     for (var i = 0; i < visited.length; i++)
         visi[i] = visited[i].slice();
@@ -48,7 +48,7 @@ const bfs = (animated, grid, visi, startCoordinate, endCoordinate) => {
                     return;
                 }
 
-                let node = grid[curr[0]+row[j]][curr[1]+col[j]];
+                let node = [...grid[curr[0]+row[j]][curr[1]+col[j]]];
                 node.push(curr[0])
                 node.push(curr[1]);
                 queue.push(node);

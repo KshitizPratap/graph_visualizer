@@ -3,20 +3,23 @@
     width: 25px;
     border: 0.1px solid rgba(148, 207, 252, 0.775);
     background-color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .Start{
-    background-color: rgb(7, 91, 248);
+    background-color: rgb(21, 255, 0);
     animation-name: animation;
     animation-duration: 0.4s;
-    border: 0.1px solid white;
+    /* border: 0.1px solid rgb(0, 0, 0); */
 }
 
 .End{
-    background-color: rgb(223, 6, 6);
+    background-color: rgb(255, 5, 5);
     animation-name: animationEnd;
     animation-duration: 0.4s;
-    border: 0.1px solid white;
+    /* border: 0.1px solid rgb(0, 0, 0); */
 
 }  
 

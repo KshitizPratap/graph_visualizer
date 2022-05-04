@@ -11,6 +11,8 @@ import {
   RandomMaze,
 } from "../Function/MazeFunction";
 
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+
 function GraphVisualizer() {
   const [grid, setGrid] = useState([], []);
   const [visited, setVisited] = useState([], []);
@@ -26,10 +28,10 @@ function GraphVisualizer() {
   const [reload, setReload] = useState(false);
 
   const [algo, setAlgo] = useState("select");
+  const [speed, setSpeed] = useState(20);
 
   let row,
-    col,
-    speed = 20;
+    col;
 
   useEffect(() => {
     let height = window.innerHeight;
@@ -37,6 +39,9 @@ function GraphVisualizer() {
 
     row = parseInt(width / 27);
     col = parseInt((0.85 * height) / 29);
+
+    // row = 20;
+    // col = 20;
 
     let temp = Array(row)
       .fill(0)
@@ -138,7 +143,7 @@ function GraphVisualizer() {
   };
 
   const speedHandler = (event) => {
-    speed = 70-event.target.value
+    setSpeed(70-event.target.value)
     // console.log("[speed]", speed);
   };
 
@@ -162,7 +167,6 @@ function GraphVisualizer() {
     }
 
     path.reverse();
-    path.push(endCoordinate);
 
     let arr = document.getElementsByClassName("tableNodes");
 
@@ -179,9 +183,10 @@ function GraphVisualizer() {
     sessionStorage.setItem("mazeArr", JSON.stringify(visited));
 
     let animated = shortestPath(grid, visited, startCoordinate, endCoordinate);
+
     let arr = document.getElementsByClassName("tableNodes");
 
-    for (let i = 0; i < animated.length; i++) {
+    for (let i = 1; i < animated.length; i++) {
       setTimeout(() => {
         {
           arr[animated[i - 1][0]].children[animated[i - 1][1]].classList.add(
@@ -209,7 +214,6 @@ function GraphVisualizer() {
     sessionStorage.setItem("mazeArr", JSON.stringify(visited));
 
     let animated = DFSPathfinder(grid, visited, startCoordinate, endCoordinate);
-    console.log("[Animated DFS]", animated);
 
     let arr = document.getElementsByClassName("tableNodes");
     for (let i = 0; i < animated.length; i++) {
@@ -462,7 +466,7 @@ function GraphVisualizer() {
           <input
             type="range"
             onChange={speedHandler}
-            defaultValue="20"
+            defaultValue="30"
             min="10"
             max="60"
           />
