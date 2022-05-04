@@ -11,7 +11,7 @@ import {
   RandomMaze,
 } from "../Function/MazeFunction";
 
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
+import Logo from "../assets/logo.png";
 
 function GraphVisualizer() {
   const [grid, setGrid] = useState([], []);
@@ -30,15 +30,14 @@ function GraphVisualizer() {
   const [algo, setAlgo] = useState("select");
   const [speed, setSpeed] = useState(20);
 
-  let row,
-    col;
+  let row, col;
 
   useEffect(() => {
     let height = window.innerHeight;
     let width = window.innerWidth;
 
     row = parseInt(width / 27);
-    col = parseInt((0.85 * height) / 29);
+    col = parseInt((0.9 * height) / 29);
 
     // row = 20;
     // col = 20;
@@ -143,7 +142,7 @@ function GraphVisualizer() {
   };
 
   const speedHandler = (event) => {
-    setSpeed(70-event.target.value)
+    setSpeed(70 - event.target.value);
     // console.log("[speed]", speed);
   };
 
@@ -181,6 +180,7 @@ function GraphVisualizer() {
 
   const BFSPathMain = () => {
     sessionStorage.setItem("mazeArr", JSON.stringify(visited));
+    clearPathHandler();
 
     let animated = shortestPath(grid, visited, startCoordinate, endCoordinate);
 
@@ -212,6 +212,7 @@ function GraphVisualizer() {
 
   const DFSPathMain = () => {
     sessionStorage.setItem("mazeArr", JSON.stringify(visited));
+    clearPathHandler();
 
     let animated = DFSPathfinder(grid, visited, startCoordinate, endCoordinate);
 
@@ -398,6 +399,13 @@ function GraphVisualizer() {
     //   StaircaseHandler();
   };
 
+  const heading = (
+    <div className={classes.Heading}>
+      <span style={{ fontSize: "30px", marginRight: "20px" }}>Maze</span>
+      <span>Solver</span>
+    </div>
+  );
+
   const table =
     grid.length !== 0
       ? grid.map((arr) => {
@@ -428,57 +436,62 @@ function GraphVisualizer() {
 
   return (
     <div className={classes.Wrapper}>
-      <div className={classes.Nav}>Maze Solver</div>
-      <div className={classes.ButtonWrapper}>
-        <select name="maze" id="maze" onChange={MazeHandler}>
-          <option value="maze" selected disabled hidden>
-            Select Maze
-          </option>
-          <option value="random">Random Maze</option>
-          <option value="simple">Simple Maze</option>
-          <option value="staircase">Staircase Maze</option>
-          <option value="vertical">Vertical Skew</option>
-          <option value="horizontal">Horizontal Skew</option>
-        </select>
+      <div className={classes.Nav}>
+        <div>
+          <img src={Logo} />
+          {heading}
+        </div>
+        <div className={classes.ButtonWrapper}>
+          <select name="maze" id="maze" onChange={MazeHandler}>
+            <option value="maze" selected disabled hidden>
+              Select Maze
+            </option>
+            <option value="random">Random Maze</option>
+            <option value="simple">Simple Maze</option>
+            <option value="staircase">Staircase Maze</option>
+            <option value="vertical">Vertical Skew</option>
+            <option value="horizontal">Horizontal Skew</option>
+          </select>
 
-        <a onClick={startHandler} className={classes.Button}>
-          Start
-        </a>
-        <a onClick={endHandler} className={classes.Button}>
-          End
-        </a>
+          <a onClick={startHandler} className={classes.Button}>
+            Start
+          </a>
+          <a onClick={endHandler} className={classes.Button}>
+            End
+          </a>
 
-        <select name="algorithm" id="algorithm" onChange={AlgoHandler}>
-          <option value="algo" selected disabled hidden>
-            Select Algorithm
-          </option>
-          <option value="dijkstra">Dijkstra's Algorithm</option>
-          <option value="bfs">Breath-First Search</option>
-          <option value="dfs">Depth-First Search</option>
-        </select>
+          <select name="algorithm" id="algorithm" onChange={AlgoHandler}>
+            <option value="algo" selected disabled hidden>
+              Select Algorithm
+            </option>
+            <option value="dijkstra">Dijkstra's Algorithm</option>
+            <option value="bfs">Breath-First Search</option>
+            <option value="dfs">Depth-First Search</option>
+          </select>
 
-        <a onClick={VisualizeHandler} className={classes.Button}>
-          Visualize
-        </a>
+          <a onClick={VisualizeHandler} className={classes.Button}>
+            Visualize
+          </a>
 
-        <span className={classes.speedInput}>
-          Speed
-          <input
-            type="range"
-            onChange={speedHandler}
-            defaultValue="30"
-            min="10"
-            max="60"
-          />
-        </span>
+          <span className={classes.speedInput}>
+            Speed
+            <input
+              type="range"
+              onChange={speedHandler}
+              defaultValue="30"
+              min="10"
+              max="60"
+            />
+          </span>
 
-        <a onClick={clearPathHandler} className={classes.Button}>
-          Clear Path
-        </a>
+          <a onClick={clearPathHandler} className={classes.Button}>
+            Clear Path
+          </a>
 
-        <a onClick={clearHandler} className={classes.Button}>
-          Clear Board
-        </a>
+          <a onClick={clearHandler} className={classes.Button}>
+            Clear Board
+          </a>
+        </div>
       </div>
 
       <div className={classes.Table} onMouseLeave={() => setWall(false)}>

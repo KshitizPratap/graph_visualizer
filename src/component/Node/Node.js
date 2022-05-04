@@ -29,7 +29,7 @@ function Node(props) {
         width="25"
         height="25"
         fill="black"
-        class="bi bi-play-fill"
+        className="bi bi-play-fill"
         viewBox="0 0 16 16"
       >
         <path d="m11.596 8.697-6.363 3.692c-.54.313-1.233-.066-1.233-.697V4.308c0-.63.692-1.01 1.233-.696l6.363 3.692a.802.802 0 0 1 0 1.393z" />
@@ -44,7 +44,7 @@ function Node(props) {
         width="20"
         height="20"
         fill="black"
-        class="bi bi-award-fill"
+        className="bi bi-award-fill"
         viewBox="0 0 16 16"
       >
         <path d="m8 0 1.669.864 1.858.282.842 1.68 1.337 1.32L13.4 6l.306 1.854-1.337 1.32-.842 1.68-1.858.282L8 12l-1.669-.864-1.858-.282-.842-1.68-1.337-1.32L2.6 6l-.306-1.854 1.337-1.32.842-1.68L6.331.864 8 0z" />

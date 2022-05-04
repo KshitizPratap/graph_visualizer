@@ -4,32 +4,63 @@
 }
 
 .Nav{
-    height: 13vh;
-    font-size: xx-large;
+    height: 14vh;
+    font-size: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-around;
+}
+
+.Nav img{
+  position: absolute;
+  top: 10;
+  left: 10;
+  height: 13vh;
+}
+
+.Heading{
+  height: 50%;
+  margin-left: 13vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+.Heading span{
+  font-family: 'Concert One', cursive;
+  font-weight: bolder;
+  margin: 0;
+  padding: 0;
 }
 
 .Table{
-    margin-top: 1vh;
     display: flex;
     align-items: center;
     justify-content: center;
     flex-flow: wrap;
     overflow: hidden;
     width: 100%;
-    height: 80vh;
+    height: 85vh;
 }
 
 .ButtonWrapper{
     display: flex;
     justify-content: center;
-    height: 5.5vh;
+    align-items: center;
+    height: 100%;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    width: 85%;
+    /* background-color: aqua; */
 }
 
 .Button{
   background-color: rgb(5, 6, 45);
   color: white;
   font-family: 'Roboto', sans-serif;
-  height: 100%;
+  height: 40%;
+  min-height: 35px;
   border: none;
   border-radius: 5px;
   font-size: medium;
@@ -86,9 +117,9 @@ select{
   color: white;
   border-radius: 5px;
   font-size: medium;
-  padding: 10px 0;
   padding-left: 5px;
-  height: 100%;
+  height: 40%;
+  min-height: 35px;
   margin-left: 10px;
   cursor: pointer;
 }
@@ -113,6 +144,8 @@ option{
   align-items: center;
   padding: 0 15px;
   margin-left: 10px;
+  height: 40%;
+  min-height: 35px;
 }
 
 @keyframes animation {
