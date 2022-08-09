@@ -1,5 +1,4 @@
 import React from "react";
-
 import classes from "./Node.module.css";
 
 function Node(props) {
